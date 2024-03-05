@@ -11,7 +11,7 @@ class Obstacle(context: Context, screenWidth: Int, screenHeight: Int) :
 
     init {
         layoutParams = FrameLayout.LayoutParams(90, 90)
-        x = screenWidth.toFloat()
+        x = screenWidth.toFloat() + 500F
         y = screenHeight / 2F
     }
 }

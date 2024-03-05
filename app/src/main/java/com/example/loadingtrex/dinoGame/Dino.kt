@@ -23,11 +23,11 @@ class Dino(context: Context) : AppCompatImageView(context) {
             isJumping = true
             animate()
                 .translationYBy(-jumpHeight)
-                .setDuration(500)
+                .setDuration(600)
                 .withEndAction {
                     animate()
                         .translationYBy(jumpHeight)
-                        .setDuration(600)
+                        .setDuration(500)
                         .withEndAction {
                             isJumping = false
                         }

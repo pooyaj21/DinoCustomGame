@@ -63,11 +63,11 @@ class GameLayout(context: Context, private val onLost: () -> Unit) : FrameLayout
         obstacles.add(obstacle)
         addView(obstacle)
         val animation = ObjectAnimator.ofPropertyValuesHolder(
-            obstacle, PropertyValuesHolder.ofFloat("x", obstacle.x, -100F)
-        )
-        animation.duration = 2500L
+            obstacle, PropertyValuesHolder.ofFloat("x", obstacle.x, -500F)
+        ).apply {
+        duration = 3000L
+        }
         animation.addUpdateListener {
-            // Check if the current X-coordinate reaches a certain value
             if (isCollision(obstacle)) {
                 dino.isDead = true
                 animation.cancel()
