@@ -6,6 +6,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
 import android.graphics.Rect
+import android.view.MotionEvent
 import android.view.View
 import android.widget.FrameLayout
 import androidx.core.animation.doOnEnd
@@ -30,9 +31,17 @@ class GameLayout(context: Context, private val onLost: () -> Unit) : FrameLayout
             LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT
         )
         setBackgroundColor(Color.TRANSPARENT)
-        setOnClickListener {
-            dino.jump()
+        setOnTouchListener { _, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    dino.jump()
+                    performClick()
+                    true
+                }
+                else -> false
+            }
         }
+
         addView(dino, LayoutParams(100, 100))
         startObstacleGenerator()
         addView(middleLine, LayoutParams(LayoutParams.MATCH_PARENT, 10))
@@ -42,7 +51,7 @@ class GameLayout(context: Context, private val onLost: () -> Unit) : FrameLayout
         obstacleJob = CoroutineScope(Dispatchers.Main).launch {
             while (!dino.isDead) {
                 delay((Random().nextInt(2000) + 1000).toLong()) // Random delay between 1 to 3 seconds
-                addObstacle(appLogos[Random().nextInt(3)])
+                addObstacle(appLogos[Random().nextInt(appLogos.size)])
             }
             obstacleJob?.cancel()
         }
