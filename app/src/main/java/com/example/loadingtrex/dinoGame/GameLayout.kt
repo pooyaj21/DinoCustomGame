@@ -9,6 +9,7 @@ import android.graphics.Rect
 import android.view.View
 import android.widget.FrameLayout
 import androidx.core.animation.doOnEnd
+import com.example.loadingtrex.R
 import kotlinx.coroutines.*
 import java.util.*
 
@@ -21,6 +22,8 @@ class GameLayout(context: Context, private val onLost: () -> Unit) : FrameLayout
     }
     private val obstacles = mutableListOf<Obstacle>()
     private var obstacleJob: Job? = null
+
+    private val appLogos = listOf(R.drawable.pharma, R.drawable.care, R.drawable.mataq)
 
     init {
         layoutParams = LayoutParams(
@@ -39,14 +42,15 @@ class GameLayout(context: Context, private val onLost: () -> Unit) : FrameLayout
         obstacleJob = CoroutineScope(Dispatchers.Main).launch {
             while (!dino.isDead) {
                 delay((Random().nextInt(2000) + 1000).toLong()) // Random delay between 1 to 3 seconds
-                addObstacle()
+                addObstacle(appLogos[Random().nextInt(3)])
             }
             obstacleJob?.cancel()
         }
     }
 
-    private fun addObstacle() {
+    private fun addObstacle(imageView: Int) {
         val obstacle = Obstacle(context, width, height)
+        obstacle.setImageResource(imageView)
         obstacles.add(obstacle)
         addView(obstacle)
         val animation = ObjectAnimator.ofPropertyValuesHolder(
