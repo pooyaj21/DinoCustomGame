@@ -1,12 +1,16 @@
 package com.example.loadingtrex.dinoGame
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
+import android.animation.ValueAnimator
 import android.content.Context
+import android.view.animation.AccelerateDecelerateInterpolator
+import android.view.animation.AccelerateInterpolator
 import androidx.appcompat.widget.AppCompatImageView
 import com.example.loadingtrex.R
 
 class Dino(context: Context) : AppCompatImageView(context) {
     private var isJumping = false
-    private val jumpHeight = 250F
     var isDead = false
 
     init {
@@ -21,19 +25,39 @@ class Dino(context: Context) : AppCompatImageView(context) {
     fun jump() {
         if (!isJumping && !isDead) {
             isJumping = true
-            animate()
-                .translationYBy(-jumpHeight)
-                .setDuration(600)
-                .withEndAction {
-                    animate()
-                        .translationYBy(jumpHeight)
-                        .setDuration(500)
-                        .withEndAction {
-                            isJumping = false
-                        }
-                        .start()
+            val startY = this.y
+            val jumpHeight = -200F
+            val jumpDuration = 400L
+            val downDuration = 350L
+
+            val jumpAnim = ValueAnimator.ofFloat(0F, jumpHeight).apply {
+                duration = jumpDuration
+                interpolator = AccelerateDecelerateInterpolator()
+                addUpdateListener { animation ->
+                    y = startY + animation.animatedValue as Float
                 }
-                .start()
+            }
+
+            val downAnim = ValueAnimator.ofFloat(jumpHeight, 0F).apply {
+                duration = downDuration
+                interpolator = AccelerateInterpolator()
+                addUpdateListener { animation ->
+                    y = startY + animation.animatedValue as Float
+                }
+                addListener(object : AnimatorListenerAdapter() {
+                    override fun onAnimationEnd(animation: Animator) {
+                        isJumping = false
+                    }
+                })
+            }
+
+            jumpAnim.addListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator) {
+                    downAnim.start()
+                }
+            })
+
+            jumpAnim.start()
         }
     }
 }

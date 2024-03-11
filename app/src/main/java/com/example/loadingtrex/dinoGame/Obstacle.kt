@@ -10,7 +10,7 @@ class Obstacle(context: Context, screenWidth: Int, screenHeight: Int) :
     AppCompatImageView(context) {
 
     init {
-        layoutParams = FrameLayout.LayoutParams(90, 90)
+        layoutParams = FrameLayout.LayoutParams(120, 120)
         x = screenWidth.toFloat() + 500F
         y = screenHeight / 2F
     }
