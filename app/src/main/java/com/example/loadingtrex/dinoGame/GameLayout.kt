@@ -38,8 +38,16 @@ class GameLayout(context: Context, private val onLost: () -> Unit) : FrameLayout
                     performClick()
                     true
                 }
-                else -> false
+                else -> {
+                    dino.jump()
+                    performClick()
+                    true
+                }
             }
+        }
+        setOnLongClickListener {
+            dino.jump()
+            performClick()
         }
 
         addView(dino, LayoutParams(100, 100))
@@ -65,7 +73,7 @@ class GameLayout(context: Context, private val onLost: () -> Unit) : FrameLayout
         val animation = ObjectAnimator.ofPropertyValuesHolder(
             obstacle, PropertyValuesHolder.ofFloat("x", obstacle.x, -500F)
         ).apply {
-        duration = 3000L
+            duration = 3000L
         }
         animation.addUpdateListener {
             if (isCollision(obstacle)) {
@@ -100,8 +108,15 @@ class GameLayout(context: Context, private val onLost: () -> Unit) : FrameLayout
 
         val rect2 = Rect()
         obstacle.getHitRect(rect2)
+        val smallerRectWidth = (rect2.width() * 0.5).toInt() //50% of obstacle width
+        val smallerRectHeight = (rect2.height() * 0.5).toInt() //50% of obstacle height
+        rect2.left = rect2.left + (rect2.width() - smallerRectWidth) / 2
+        rect2.top = rect2.top + (rect2.height() - smallerRectHeight) / 2
+        rect2.right = rect2.left + smallerRectWidth
+        rect2.bottom = rect2.top + smallerRectHeight
 
         return rect1.intersect(rect2)
     }
+
 
 }
