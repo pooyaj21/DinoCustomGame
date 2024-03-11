@@ -2,6 +2,7 @@ package com.example.loadingtrex.dinoGame
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Typeface
 import android.view.Gravity
 import android.widget.*
 import com.example.loadingtrex.R
@@ -12,11 +13,12 @@ class LostLayout(context: Context, private val onRetry: () -> Unit) : LinearLayo
         setImageResource(R.drawable.dino_dead)
     }
     private val textView = TextView(context).apply {
-        text = "You Lost!"
+        text = "G A M E  O V E R"
         textAlignment = TEXT_ALIGNMENT_CENTER
+        setTypeface(null, Typeface.BOLD)
     }
     private val retryButton = Button(context).apply {
-        text = "Retry"
+        setBackgroundResource(R.drawable.retry)
         setOnClickListener {
             onRetry()
         }
@@ -29,17 +31,11 @@ class LostLayout(context: Context, private val onRetry: () -> Unit) : LinearLayo
             FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT
         )
 
-        val layoutParams = LayoutParams(
+        addView(imageView, LayoutParams(180, 180))
+        addView(textView, LayoutParams(
             LayoutParams.MATCH_PARENT,
             LayoutParams.WRAP_CONTENT
-        )
-        addView(imageView, layoutParams)
-        addView(textView, layoutParams)
-        addView(
-            retryButton, LayoutParams(
-                LayoutParams.WRAP_CONTENT,
-                LayoutParams.WRAP_CONTENT
-            )
-        )
+        ))
+        addView(retryButton, LayoutParams(120, 150))
     }
 }
