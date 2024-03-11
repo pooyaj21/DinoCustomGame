@@ -50,7 +50,7 @@ class GameLayout(context: Context, private val onLost: () -> Unit) : FrameLayout
             performClick()
         }
 
-        addView(dino, LayoutParams(100, 100))
+        addView(dino, LayoutParams(120, 120))
         startObstacleGenerator()
         addView(middleLine, LayoutParams(LayoutParams.MATCH_PARENT, 10))
     }
@@ -95,7 +95,7 @@ class GameLayout(context: Context, private val onLost: () -> Unit) : FrameLayout
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
         super.onLayout(changed, left, top, right, bottom)
         if (dino.y == 0F) dino.changeHeight(height / 2F)
-        if (middleLine.y == 0F) middleLine.y = (height / 2F) + 100
+        if (middleLine.y == 0F) middleLine.y = (height / 2F) + dino.height
     }
 
     fun onDestroy() {
