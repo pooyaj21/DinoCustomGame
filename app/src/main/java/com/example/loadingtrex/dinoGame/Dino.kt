@@ -8,23 +8,44 @@ import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.AccelerateInterpolator
 import androidx.appcompat.widget.AppCompatImageView
 import com.example.loadingtrex.R
+import kotlinx.coroutines.*
 
 class Dino(context: Context) : AppCompatImageView(context) {
     private var isJumping = false
+    private var runningJob: Job? = null
     var isDead = false
 
     init {
         setImageResource(R.drawable.dino)
         x = 50F
+        startRunning()
     }
 
     fun changeHeight(height: Float) {
         y = height
     }
 
+    private fun startRunning() {
+        runningJob = CoroutineScope(Dispatchers.Main).launch {
+            while (!isDead) {
+                delay(100)
+                setImageResource(R.drawable.dino_run_left_leg)
+                delay(100)
+                setImageResource(R.drawable.dino_run_right_leg)
+            }
+            runningJob?.cancel()
+        }
+    }
+
+    private fun stopRunning() {
+        runningJob?.cancel()
+        setImageResource(R.drawable.dino)
+    }
+
     fun jump() {
         if (!isJumping && !isDead) {
             isJumping = true
+            stopRunning()
             val startY = this.y
             val jumpHeight = -200F
             val jumpDuration = 400L
@@ -47,6 +68,7 @@ class Dino(context: Context) : AppCompatImageView(context) {
                 addListener(object : AnimatorListenerAdapter() {
                     override fun onAnimationEnd(animation: Animator) {
                         isJumping = false
+                        startRunning()
                     }
                 })
             }
