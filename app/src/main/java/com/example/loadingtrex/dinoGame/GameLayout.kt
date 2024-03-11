@@ -6,6 +6,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
 import android.graphics.Rect
+import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
 import android.widget.FrameLayout
@@ -15,12 +16,15 @@ import kotlinx.coroutines.*
 import java.util.*
 
 @SuppressLint("ViewConstructor")
-class GameLayout(context: Context, private val onLost: () -> Unit) : FrameLayout(context) {
+class GameLayout(
+    context: Context, highestScore: Int, private val onLost: () -> Unit
+) : FrameLayout(context) {
 
     private val dino = Dino(context)
     private val middleLine = View(context).apply {
         setBackgroundColor(Color.BLACK)
     }
+    private val scoreView = ScoreView(context, highestScore)
     private val obstacles = mutableListOf<Obstacle>()
     private var obstacleJob: Job? = null
 
@@ -51,8 +55,25 @@ class GameLayout(context: Context, private val onLost: () -> Unit) : FrameLayout
         }
 
         addView(dino, LayoutParams(120, 120))
-        startObstacleGenerator()
+        val scoreLayoutParams = LayoutParams(
+            LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT
+        ).apply {
+            gravity = Gravity.END
+            setMargins(0, 20, 10, 0)
+        }
+        addView(scoreView, scoreLayoutParams)
         addView(middleLine, LayoutParams(LayoutParams.MATCH_PARENT, 10))
+        startObstacleGenerator()
+        startScoreIncrementer()
+    }
+
+    private fun startScoreIncrementer() {
+        CoroutineScope(Dispatchers.Main).launch {
+            while (!dino.isDead) {
+                delay(50)
+                scoreView.addScore()
+            }
+        }
     }
 
     private fun startObstacleGenerator() {
@@ -98,10 +119,6 @@ class GameLayout(context: Context, private val onLost: () -> Unit) : FrameLayout
         if (middleLine.y == 0F) middleLine.y = (height / 2F) + dino.height
     }
 
-    fun onDestroy() {
-        obstacleJob?.cancel()
-    }
-
     private fun isCollision(obstacle: Obstacle): Boolean {
         val rect1 = Rect()
         dino.getHitRect(rect1)
@@ -118,5 +135,9 @@ class GameLayout(context: Context, private val onLost: () -> Unit) : FrameLayout
         return rect1.intersect(rect2)
     }
 
+    fun onDestroy() {
+        obstacleJob?.cancel()
+    }
 
+    fun getTheScore() = scoreView.score
 }

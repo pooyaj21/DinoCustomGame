@@ -5,14 +5,16 @@ import android.view.View
 import android.widget.FrameLayout
 
 class DinoGame(context: Context) : FrameLayout(context) {
-    private val gameLayout = GameLayout(context, onLost = {
+    private var highestScore = 0
+
+    private val gameLayout = GameLayout(context, highestScore = highestScore, onLost = {
         replaceView(lostLayout)
     })
     private lateinit var lostLayout: LostLayout
 
     init {
         lostLayout = LostLayout(context, onRetry = {
-            replaceView(GameLayout(context, onLost = {
+            replaceView(GameLayout(context, highestScore = highestScore, onLost = {
                 replaceView(lostLayout)
             }))
         })
@@ -20,11 +22,12 @@ class DinoGame(context: Context) : FrameLayout(context) {
     }
 
     private fun replaceView(newView: View) {
+        highestScore = gameLayout.getTheScore()
         removeAllViews()
         addView(newView)
     }
 
-    fun onDestroy(){
+    fun onDestroy() {
         gameLayout.onDestroy()
     }
 }
