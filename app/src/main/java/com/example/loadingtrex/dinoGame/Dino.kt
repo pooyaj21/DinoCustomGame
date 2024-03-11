@@ -10,7 +10,7 @@ import androidx.appcompat.widget.AppCompatImageView
 import com.example.loadingtrex.R
 import kotlinx.coroutines.*
 
-class Dino(context: Context) : AppCompatImageView(context) {
+internal class Dino(context: Context) : AppCompatImageView(context) {
     private var isJumping = false
     private var runningJob: Job? = null
     var isDead = false

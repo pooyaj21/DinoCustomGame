@@ -8,7 +8,7 @@ import android.widget.*
 import com.example.loadingtrex.R
 
 @SuppressLint("ViewConstructor")
-class LostLayout(context: Context, private val onRetry: () -> Unit) : LinearLayout(context) {
+internal class LostLayout(context: Context, private val onRetry: () -> Unit) : LinearLayout(context) {
     private val imageView = ImageView(context).apply {
         setImageResource(R.drawable.dino_dead)
     }

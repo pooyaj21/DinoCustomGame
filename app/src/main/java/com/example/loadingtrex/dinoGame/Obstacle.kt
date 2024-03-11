@@ -6,7 +6,7 @@ import android.widget.FrameLayout
 import androidx.appcompat.widget.AppCompatImageView
 
 @SuppressLint("ViewConstructor")
-class Obstacle(context: Context, screenWidth: Int, screenHeight: Int) :
+internal class Obstacle(context: Context, screenWidth: Int, screenHeight: Int) :
     AppCompatImageView(context) {
 
     init {

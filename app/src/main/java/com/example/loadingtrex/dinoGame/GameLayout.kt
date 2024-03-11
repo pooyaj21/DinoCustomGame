@@ -16,7 +16,7 @@ import kotlinx.coroutines.*
 import java.util.*
 
 @SuppressLint("ViewConstructor")
-class GameLayout(
+internal class GameLayout(
     context: Context, highestScore: Int, private val onLost: () -> Unit
 ) : FrameLayout(context) {
 

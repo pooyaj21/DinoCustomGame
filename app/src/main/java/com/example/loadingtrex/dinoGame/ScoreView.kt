@@ -7,7 +7,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 
 @SuppressLint("ViewConstructor")
-class ScoreView(context: Context, private val highestScore: Int) : LinearLayout(context) {
+internal class ScoreView(context: Context, private val highestScore: Int) : LinearLayout(context) {
     var score = 0
         private set
     private val highestScoreTextView = TextView(context).apply {
