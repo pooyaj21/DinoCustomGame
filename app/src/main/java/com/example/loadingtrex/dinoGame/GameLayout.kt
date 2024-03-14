@@ -12,19 +12,21 @@ import android.view.View
 import android.widget.FrameLayout
 import androidx.core.animation.doOnEnd
 import com.example.loadingtrex.R
+import com.example.loadingtrex.dinoGame.score.ScoreView
 import kotlinx.coroutines.*
 import java.util.*
 
 @SuppressLint("ViewConstructor")
 internal class GameLayout(
-    context: Context, highestScore: Int, private val onLost: () -> Unit
+    context: Context,
+    private val onLost: () -> Unit
 ) : FrameLayout(context) {
 
     private val dino = Dino(context)
     private val middleLine = View(context).apply {
         setBackgroundColor(Color.BLACK)
     }
-    private val scoreView = ScoreView(context, highestScore)
+    private val scoreView = ScoreView.Game(context)
     private val obstacles = mutableListOf<Obstacle>()
     private var obstacleJob: Job? = null
 
@@ -138,6 +140,4 @@ internal class GameLayout(
     fun onDestroy() {
         obstacleJob?.cancel()
     }
-
-    fun getTheScore() = scoreView.score
 }
