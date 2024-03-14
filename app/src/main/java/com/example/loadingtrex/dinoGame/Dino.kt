@@ -14,6 +14,8 @@ internal class Dino(context: Context) : AppCompatImageView(context) {
     private var isJumping = false
     private var runningJob: Job? = null
     var isDead = false
+    val jumpHeight = 200
+    val measure = 120
 
     init {
         setImageResource(R.drawable.dino)
@@ -47,11 +49,10 @@ internal class Dino(context: Context) : AppCompatImageView(context) {
             isJumping = true
             stopRunning()
             val startY = this.y
-            val jumpHeight = -200F
             val jumpDuration = 400L
             val downDuration = 350L
 
-            val jumpAnim = ValueAnimator.ofFloat(0F, jumpHeight).apply {
+            val jumpAnim = ValueAnimator.ofFloat(0F, -jumpHeight.toFloat()).apply {
                 duration = jumpDuration
                 interpolator = AccelerateDecelerateInterpolator()
                 addUpdateListener { animation ->
@@ -59,7 +60,7 @@ internal class Dino(context: Context) : AppCompatImageView(context) {
                 }
             }
 
-            val downAnim = ValueAnimator.ofFloat(jumpHeight, 0F).apply {
+            val downAnim = ValueAnimator.ofFloat(-jumpHeight.toFloat(), 0F).apply {
                 duration = downDuration
                 interpolator = AccelerateInterpolator()
                 addUpdateListener { animation ->

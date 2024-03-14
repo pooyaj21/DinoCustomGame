@@ -9,7 +9,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        dinoGame = DinoGame(this)
+        dinoGame = DinoGame(this, 0.5)
         setContentView(dinoGame)
     }
 

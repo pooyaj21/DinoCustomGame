@@ -33,9 +33,8 @@ internal class GameLayout(
     private val appLogos = listOf(R.drawable.pharma, R.drawable.care, R.drawable.mataq)
 
     init {
-        layoutParams = LayoutParams(
-            LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT
-        )
+        minimumHeight = dino.measure + dino.jumpHeight + 100
+        layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, minimumHeight)
         setBackgroundColor(Color.TRANSPARENT)
         setOnTouchListener { _, event ->
             when (event.action) {
@@ -56,7 +55,7 @@ internal class GameLayout(
             performClick()
         }
 
-        addView(dino, LayoutParams(120, 120))
+        addView(dino, LayoutParams(dino.measure, dino.measure))
         val scoreLayoutParams = LayoutParams(
             LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT
         ).apply {
@@ -135,6 +134,19 @@ internal class GameLayout(
         rect2.bottom = rect2.top + smallerRectHeight
 
         return rect1.intersect(rect2)
+    }
+
+    fun onTouch(event: MotionEvent): Boolean {
+        return when (event.action) {
+            MotionEvent.ACTION_DOWN -> {
+                dino.jump()
+                true
+            }
+            else -> {
+                dino.jump()
+                true
+            }
+        }
     }
 
     fun onDestroy() {
